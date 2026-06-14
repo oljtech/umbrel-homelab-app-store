@@ -1,0 +1,39 @@
+manifestVersion: 1
+id: homelab-homepage
+category: Dashboards
+name: Homepage
+version: "1.13.2"
+tagline: A modern, fully static, fast, secure, highly customizable dashboard
+description: >-
+  Homepage is a modern, fully static, fast, secure, fully proxied, highly
+  customizable application dashboard with integrations for over 100 services
+  and translations into multiple languages.
+
+
+  Easily configured via YAML files or through Docker label discovery, Homepage
+  lets you keep an eye on all your self-hosted services and infrastructure from
+  a single page — with widgets for system resources, weather, search, and live
+  status/stats pulled from the apps themselves.
+
+
+  Configuration files live in the app's data directory. The Docker socket is
+  mounted read-only so Homepage can auto-discover your other containers.
+releaseNotes: >-
+  Bug fixes for Dispatcharr v24 API changes, cookie header handling, and the
+  Seerr widget, plus numerous maintenance updates. See the upstream release
+  notes for the full changelog.
+developer: gethomepage
+website: https://gethomepage.dev
+dependencies: []
+repo: https://github.com/gethomepage/homepage
+support: https://github.com/gethomepage/homepage/discussions
+port: 8095
+gallery:
+  - 1.jpg
+  - 2.jpg
+  - 3.jpg
+path: ""
+defaultUsername: ""
+defaultPassword: ""
+submitter: oliver
+submission: https://github.com/gethomepage/homepage

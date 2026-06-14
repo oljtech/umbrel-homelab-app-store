@@ -1,0 +1,57 @@
+# Homelab Apps — Umbrel Community App Store
+
+A personal [Umbrel](https://umbrel.com) community app store.
+
+## Apps
+
+| App | Version | Description |
+| --- | --- | --- |
+| [Homepage](https://gethomepage.dev) | 1.13.2 | Modern, highly customizable application dashboard |
+
+## Ajouter ce store à Umbrel
+
+1. Push ce repo sur GitHub (voir plus bas).
+2. Dans umbrelOS : **App Store** → menu **⋯** (en haut à droite) → **Community App Stores**.
+3. Colle l'URL du repo, p. ex. `https://github.com/<ton-user>/umbrel-homelab-app-store`, puis **Add**.
+4. Le store « Homelab Apps » apparaît ; installe **Homepage** depuis là.
+
+> L'URL acceptée est celle du repo GitHub (https). Le repo doit être **public**.
+
+## Structure (format imposé par Umbrel)
+
+```
+umbrel-homelab-app-store/
+├── umbrel-app-store.yml        # id + nom du store
+└── homelab-homepage/           # = <store-id>-<app>, préfixe obligatoire
+    ├── umbrel-app.yml          # manifeste de l'app
+    ├── docker-compose.yml      # service + app_proxy
+    └── (1.jpg, 2.jpg, 3.jpg)   # captures pour la fiche store (à ajouter)
+```
+
+⚠️ **Renommer le store** : si tu changes `id:` dans `umbrel-app-store.yml`, tu dois
+aussi renommer le dossier `homelab-homepage/`, le champ `id:` du manifeste **et**
+`APP_HOST` dans le `docker-compose.yml` (toujours `<app-id>_web_1`).
+
+## Notes Homepage spécifiques à Umbrel
+
+- **`HOMEPAGE_ALLOWED_HOSTS`** : Homepage rejette tout Host header non listé. Réglé sur
+  `*` par défaut ici (simple et fiable sur LAN). Pour verrouiller, mets
+  `umbrel.local:8095,<IP>:8095` dans le `docker-compose.yml`.
+- **Port** : exposé sur `8095` (champ `port` du manifeste). Change-le si conflit.
+- **Docker socket** monté en lecture seule pour l'auto-découverte des conteneurs.
+- La config vit dans `app/data/config` (dans le data dir de l'app sur Umbrel) et est
+  éditable en YAML ; les fichiers par défaut sont créés au premier démarrage.
+
+## Mettre à jour Homepage
+
+Bump `version:` dans le manifeste + l'image (`tag@sha256:...`) dans le compose,
+commit/push, puis « Update » dans Umbrel. Récupérer le digest d'un tag :
+
+```sh
+token=$(curl -s "https://ghcr.io/token?scope=repository:gethomepage/homepage:pull" \
+  | sed -E 's/.*"token":"([^"]+)".*/\1/')
+curl -sI -H "Authorization: Bearer $token" \
+  -H "Accept: application/vnd.oci.image.index.v1+json" \
+  "https://ghcr.io/v2/gethomepage/homepage/manifests/<TAG>" \
+  | grep -i docker-content-digest
+```
