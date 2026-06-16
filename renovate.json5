@@ -1,0 +1,48 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+
+  extends: [
+    "config:recommended",
+    // Épingle le digest @sha256 en plus du tag pour les images Docker
+    "docker:pinDigests",
+  ],
+
+  labels: ["dependencies"],
+  // Tableau de bord récap dans un issue GitHub
+  dependencyDashboard: true,
+
+  // Le manager docker-compose natif gère déjà l'image (tag + digest)
+  // dans homelab-homepage/docker-compose.yml.
+  // Ce custom manager ajoute la MAJ du champ `version:` du manifeste Umbrel,
+  // qui n'est pas un format de package standard.
+  customManagers: [
+    {
+      customType: "regex",
+      managerFilePatterns: ["/umbrel-app\\.yml$/"],
+      // Ne matche que `version: "x.y.z"` (entre guillemets) — donc PAS
+      // `manifestVersion: 1` qui est sans guillemets.
+      matchStrings: ["version:\\s*\"(?<currentValue>[^\"]+)\""],
+      depNameTemplate: "ghcr.io/gethomepage/homepage",
+      datasourceTemplate: "docker",
+      versioningTemplate: "docker",
+      // Le manifeste utilise "1.13.2" alors que le tag de l'image est "v1.13.2".
+      // On retire le "v" pour garder le champ sans préfixe.
+      extractVersionTemplate: "^v?(?<version>.+)$",
+    },
+  ],
+
+  packageRules: [
+    // Le digest n'a aucun sens dans le manifeste : pas de pinDigests ici
+    // (sinon le custom manager casse — bug connu de Renovate).
+    {
+      matchManagers: ["custom.regex"],
+      pinDigests: false,
+    },
+    // Une seule PR met à jour le compose ET le manifeste ensemble.
+    {
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/gethomepage/homepage"],
+      groupName: "homepage",
+    },
+  ],
+}
