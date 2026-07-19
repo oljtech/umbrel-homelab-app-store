@@ -15,8 +15,11 @@ services:
       # de service ("db" collisionne avec le db des autres apps).
       SPRING_DATASOURCE_URL: jdbc:postgresql://homelab-picsou-finance_db_1:5432/picsou?sslmode=prefer
       SPRING_DATASOURCE_USERNAME: picsou
-      # L'entrypoint exporte lui-même SPRING_DATASOURCE_PASSWORD depuis
-      # $POSTGRES_PASSWORD (ne pas passer SPRING_DATASOURCE_PASSWORD ici).
+      # ⚠️ Spring lit SPRING_DATASOURCE_PASSWORD (défaut littéral "picsou"),
+      # PAS $POSTGRES_PASSWORD — le commentaire du compose upstream est faux
+      # (l'entrypoint 1.0.14 n'exporte pas SPRING_DATASOURCE_PASSWORD).
+      # Les deux doivent donc être fournis explicitement.
+      SPRING_DATASOURCE_PASSWORD: ${APP_SEED}
       POSTGRES_PASSWORD: ${APP_SEED}
       SPRING_PROFILES_ACTIVE: prod
       TR_AUTH_URL: http://homelab-picsou-finance_tr-auth_1:8001
