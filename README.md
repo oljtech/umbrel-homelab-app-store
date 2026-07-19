@@ -7,6 +7,7 @@ A personal [Umbrel](https://umbrel.com) community app store.
 | App | Version | Description |
 | --- | --- | --- |
 | [Homepage](https://gethomepage.dev) | 1.13.2 | Modern, highly customizable application dashboard |
+| [Picsou Finance](https://github.com/Zoeille/picsou-finance) | 1.0.14 | Self-hosted personal finance dashboard (banks, brokers, crypto) |
 
 ## Ajouter ce store à Umbrel
 
@@ -41,6 +42,20 @@ aussi renommer le dossier `homelab-homepage/`, le champ `id:` du manifeste **et*
 - **Docker socket** monté en lecture seule pour l'auto-découverte des conteneurs.
 - La config vit dans `app/data/config` (dans le data dir de l'app sur Umbrel) et est
   éditable en YAML ; les fichiers par défaut sont créés au premier démarrage.
+
+## Notes Picsou Finance spécifiques à Umbrel
+
+- **Port** : exposé sur `8577` (champ `port` du manifeste). Change-le si conflit.
+- **3 conteneurs** : `server` (Spring Boot, port interne 8080), `tr-auth`
+  (sidecar Trade Republic) et `db` (PostgreSQL 16). Le mot de passe Postgres est
+  dérivé de `${APP_SEED}` (secret déterministe fourni par umbrelOS à chaque app).
+- **Enable Banking** (synchro bancaire PSD2) : déposer la clé
+  `enablebanking.pem` dans `data/secrets/` du data dir de l'app (montée en
+  lecture seule sur `/run/secrets/`). Optionnel — sans elle, le reste fonctionne.
+- **Données** : app dans `data/app/` (secrets auto-générés, clé du wizard),
+  base dans `data/postgres/`. À inclure dans les sauvegardes.
+- **Postgres 16 épinglé** : Renovate ne propose que les digests, pas les
+  majeures (une MAJ 16→17 exigerait une migration manuelle du datadir).
 
 ## Mettre à jour Homepage
 

@@ -11,14 +11,15 @@
   // Tableau de bord récap dans un issue GitHub
   dependencyDashboard: true,
 
-  // Le manager docker-compose natif gère déjà l'image (tag + digest)
-  // dans homelab-homepage/docker-compose.yml.
-  // Ce custom manager ajoute la MAJ du champ `version:` du manifeste Umbrel,
-  // qui n'est pas un format de package standard.
+  // Le manager docker-compose natif gère déjà les images (tag + digest)
+  // dans les docker-compose.yml de chaque app.
+  // Ces custom managers ajoutent la MAJ du champ `version:` du manifeste
+  // Umbrel, qui n'est pas un format de package standard. Un manager par app,
+  // scopé sur son dossier, car le depName est en dur.
   customManagers: [
     {
       customType: "regex",
-      managerFilePatterns: ["/umbrel-app\\.yml$/"],
+      managerFilePatterns: ["/homelab-homepage/umbrel-app\\.yml$/"],
       // Ne matche que `version: "x.y.z"` (entre guillemets) — donc PAS
       // `manifestVersion: 1` qui est sans guillemets.
       matchStrings: ["version:\\s*\"(?<currentValue>[^\"]+)\""],
@@ -27,6 +28,16 @@
       versioningTemplate: "docker",
       // Le manifeste utilise "1.13.2" alors que le tag de l'image est "v1.13.2".
       // On retire le "v" pour garder le champ sans préfixe.
+      extractVersionTemplate: "^v?(?<version>.+)$",
+    },
+    {
+      customType: "regex",
+      managerFilePatterns: ["/homelab-picsou-finance/umbrel-app\\.yml$/"],
+      matchStrings: ["version:\\s*\"(?<currentValue>[^\"]+)\""],
+      depNameTemplate: "ghcr.io/zoeille/picsou-finance",
+      datasourceTemplate: "docker",
+      versioningTemplate: "docker",
+      // Tags picsou sans préfixe "v", mais on garde le strip par cohérence.
       extractVersionTemplate: "^v?(?<version>.+)$",
     },
   ],
@@ -43,6 +54,24 @@
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/gethomepage/homepage"],
       groupName: "homepage",
+    },
+    // Idem pour picsou : app + sidecar tr-auth (mêmes tags) + manifeste
+    // groupés en une PR.
+    {
+      matchDatasources: ["docker"],
+      matchPackageNames: [
+        "ghcr.io/zoeille/picsou-finance",
+        "ghcr.io/zoeille/picsou-finance/tr-auth",
+      ],
+      groupName: "picsou-finance",
+    },
+    // Postgres : rester en 16-alpine (MAJ majeure = migration manuelle du
+    // datadir) ; Renovate ne met à jour que le digest.
+    {
+      matchDatasources: ["docker"],
+      matchPackageNames: ["postgres"],
+      matchUpdateTypes: ["major"],
+      enabled: false,
     },
   ],
 }

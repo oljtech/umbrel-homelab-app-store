@@ -1,0 +1,41 @@
+manifestVersion: 1
+id: homelab-picsou-finance
+category: Finance
+name: Picsou Finance
+version: "1.0.14"
+tagline: Self-hosted personal finance dashboard for banks, brokers and crypto
+description: >-
+  Picsou Finance is a self-hosted personal finance dashboard that centralizes
+  your bank accounts, brokerage, crypto and net-worth tracking in one place.
+
+
+  It connects to EU banks via PSD2/OAuth (Enable Banking), syncs Trade Republic
+  and Binance, pulls live prices from CoinGecko and Yahoo Finance, and charts
+  your net worth over time. Multi-profile support lets a whole family share one
+  instance with granular permissions. Optional TOTP 2FA, GDPR data export, and
+  a bilingual (EN/FR) interface with dark theme round it out.
+
+
+  A setup wizard runs on first launch; secrets are auto-generated. To enable
+  bank synchronization, drop your Enable Banking key at
+  data/secrets/enablebanking.pem in the app's data directory.
+releaseNotes: >-
+  CSV transaction import with realized P&L for PEA/CTO accounts, German and
+  Spanish translations, portfolio performance now separated from debt impact,
+  design-system polish, and fixes for Trade Republic private funds and the
+  about panel build version. See the upstream release notes for details.
+developer: Zoeille
+website: https://github.com/Zoeille/picsou-finance
+dependencies: []
+repo: https://github.com/Zoeille/picsou-finance
+support: https://github.com/Zoeille/picsou-finance/issues
+port: 8577
+gallery:
+  - 1.jpg
+  - 2.jpg
+  - 3.jpg
+path: ""
+defaultUsername: ""
+defaultPassword: ""
+submitter: oliver
+submission: https://github.com/Zoeille/picsou-finance
