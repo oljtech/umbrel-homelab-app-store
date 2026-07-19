@@ -2,7 +2,7 @@ manifestVersion: 1
 id: homelab-picsou-finance
 category: Finance
 name: Picsou Finance
-version: "1.0.14"
+version: "1.1.0"
 tagline: Self-hosted personal finance dashboard for banks, brokers and crypto
 description: >-
   Picsou Finance is a self-hosted personal finance dashboard that centralizes
