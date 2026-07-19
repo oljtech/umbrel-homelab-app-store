@@ -43,6 +43,14 @@ aussi renommer le dossier `homelab-homepage/`, le champ `id:` du manifeste **et*
 - La config vit dans `app/data/config` (dans le data dir de l'app sur Umbrel) et est
   éditable en YAML ; les fichiers par défaut sont créés au premier démarrage.
 
+## ⚠️ Piège réseau Umbrel (toutes les apps)
+
+Toutes les apps partagent le réseau Docker `umbrel_main_network` : les noms de
+services (`db`, `web`…) sont des alias DNS **globaux** qui collisionnent entre
+apps. Dans un compose Umbrel, toujours référencer les autres services par
+**nom de conteneur** `<app-id>_<service>_1` (ex.
+`homelab-picsou-finance_db_1`), comme le font les apps officielles.
+
 ## Notes Picsou Finance spécifiques à Umbrel
 
 - **Port** : exposé sur `8577` (champ `port` du manifeste). Change-le si conflit.
