@@ -7,7 +7,7 @@ services:
       APP_PORT: 8080
 
   server:
-    image: ghcr.io/zoeille/picsou-finance:1.0.14@sha256:c7e18cdd9e55160a87dfed1ad9697de022145dcee113e9166e2b67c8fd8e4d09
+    image: ghcr.io/zoeille/picsou-finance:1.1.0@sha256:0c33aab588b7ad986613b62abd0bae1b1ae5b67c9a17c18706a198e284fdd2cf
     restart: on-failure
     environment:
       # ⚠️ Réseau Umbrel partagé entre toutes les apps : référencer les
@@ -34,7 +34,7 @@ services:
 
   # Sidecar d'authentification Trade Republic (port interne 8001)
   tr-auth:
-    image: ghcr.io/zoeille/picsou-finance/tr-auth:1.0.14@sha256:2e8f4d44ae8a4546e0c5177fced560361a437f463f42938dded109d4084eef05
+    image: ghcr.io/zoeille/picsou-finance/tr-auth:1.1.0@sha256:a281929a6143fee659de4a8a34bfa38bc524a126cf8520b6eb29fb03a7190f50
     restart: on-failure
 
   db:
