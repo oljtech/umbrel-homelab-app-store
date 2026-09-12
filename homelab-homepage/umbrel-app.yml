@@ -2,7 +2,7 @@ manifestVersion: 1
 id: homelab-homepage
 category: Dashboards
 name: Homepage
-version: "1.13.2"
+version: "2.3.0"
 tagline: A modern, fully static, fast, secure, highly customizable dashboard
 description: >-
   Homepage is a modern, fully static, fast, secure, fully proxied, highly
